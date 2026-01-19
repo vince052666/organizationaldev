@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizational Chart - 5 Layer Hierarchy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .org-unit {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .layer-1 {
+            background-color: #1e3a8a;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .layer-2 {
+            background-color: #2563eb;
+            color: white;
+            margin-left: 40px;
+            font-size: 1.1em;
+        }
+        .layer-3 {
+            background-color: #3b82f6;
+            color: white;
+            margin-left: 80px;
+        }
+        .layer-4 {
+            background-color: #60a5fa;
+            color: white;
+            margin-left: 120px;
+        }
+        .layer-5 {
+            background-color: #93c5fd;
+            color: #1e3a8a;
+            margin-left: 160px;
+        }
+        .unit-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .unit-code {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        .unit-details {
+            font-size: 0.9em;
+            margin-top: 8px;
+            opacity: 0.95;
+        }
+        .unit-detail-line {
+            margin: 3px 0;
+        }
+        .legend {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .legend h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+            padding: 5px 15px;
+            border-radius: 3px;
+            color: white;
+            font-size: 0.9em;
+        }
+        .connector {
+            border-left: 2px solid #ccc;
+            margin-left: 20px;
+            padding-left: 20px;
+        }
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <h1>Organizational Chart - 5 Layer Hierarchy</h1>
+    
+    <a href="/admin/" class="back-link">← Back to Admin</a>
+    
+    <div class="info-box">
+        <strong>About this chart:</strong> This organizational structure supports up to 5 layers of hierarchy. 
+        Each organizational unit can have child units at the next layer level, creating a clear chain of command 
+        from the top-level organization down to individual sub-teams.
+    </div>
+    
+    <div class="legend">
+        <h3>Layer Legend:</h3>
+        <span class="legend-item layer-1">Layer 1 - Top Level</span>
+        <span class="legend-item layer-2">Layer 2 - Division</span>
+        <span class="legend-item layer-3">Layer 3 - Department</span>
+        <span class="legend-item layer-4">Layer 4 - Team</span>
+        <span class="legend-item layer-5">Layer 5 - Sub-Team</span>
+    </div>
+    
+    <div class="chart-container">
+        {% for unit in all_units %}
+            <div class="org-unit layer-{{ unit.layer }}">
+                <div class="unit-header">
+                    {{ unit.name }}
+                    <span class="unit-code">{{ unit.code }}</span>
+                </div>
+                <div class="unit-details">
+                    {% if unit.head_name %}
+                        <div class="unit-detail-line">
+                            <strong>Head:</strong> {{ unit.head_name }}
+                            {% if unit.head_title %} ({{ unit.head_title }}){% endif %}
+                        </div>
+                    {% endif %}
+                    {% if unit.email %}
+                        <div class="unit-detail-line">
+                            <strong>Email:</strong> {{ unit.email }}
+                        </div>
+                    {% endif %}
+                    {% if unit.phone %}
+                        <div class="unit-detail-line">
+                            <strong>Phone:</strong> {{ unit.phone }}
+                        </div>
+                    {% endif %}
+                    {% if unit.description %}
+                        <div class="unit-detail-line">
+                            <strong>Description:</strong> {{ unit.description }}
+                        </div>
+                    {% endif %}
+                    <div class="unit-detail-line">
+                        <strong>Full Path:</strong> {{ unit.get_full_path }}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No organizational units found. Please add organizational units in the admin interface.</p>
+        {% endfor %}
+    </div>
+    
+    <a href="/admin/" class="back-link">← Back to Admin</a>
+</body>
+</html>
